@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Задание 1</title>
+    </head>
+    <body>
+        <form>
+            <p>Первое число: <input id="1" type="text" name="number1" placeholder="1-е число" value="0.1"></p>
+            <p>Второе число: <input id="2" type="text" name="number2" placeholder="2-е число" value="0.2"></p>
+            <p><button onclick="sum()">Сложить</button></p>
+        </form>
+    <script>
+        function sum(){
+            var number1 = document.getElementById("1");
+            var number2 = document.getElementById("2");
+            if(!isNaN(number1.value)){
+                if(!isNaN(number2.value)){
+                    // Умножаем и делим, чтобы погрешность исчезла при работе с Float
+                    var result = parseFloat(number1.value)*1000000 + parseFloat(number2.value)*1000000;
+                    alert("Результат: "+ result/1000000);
+                }
+                else{
+                    alert("Ошибка! Введите число в поле \"Второе поле\"!");
+                }
+            }
+            else {
+                alert("Ошибка! Введите число в поле \"Первое поле\"!");
+            }
+        }
+    </script>
+    </body>
+</html>

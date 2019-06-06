@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 1</title>
+    <style>
+        table{
+            width: 480px;
+            height: 480px;
+            border-spacing: 0;
+        }
+        table td{
+            width: 120px;
+            height: 120px;
+            border: 1px #a5a5a5 solid;
+            padding:0;
+        }
+        div{
+            width: 480px;
+            border: 1px #000000 solid;
+        }
+    </style>
+</head>
+<body>
+<div>
+<table>
+    <tr>
+        <td id="1" onclick="show(1)"></td>
+        <td id="2" onclick="show(2)"></td>
+        <td id="3" onclick="show(3)"></td>
+        <td id="4" onclick="show(4)"></td>
+    </tr>
+    <tr>
+        <td id="5" onclick="show(5)"></td>
+        <td id="6" onclick="show(6)"></td>
+        <td id="7" onclick="show(7)"></td>
+        <td id="8" onclick="show(8)"></td>
+    </tr>
+    <tr>
+        <td id="9" onclick="show(9)"></td>
+        <td id="10" onclick="show(10)"></td>
+        <td id="11" onclick="show(11)"></td>
+        <td id="12" onclick="show(12)"></td>
+    </tr>
+    <tr>
+        <td id="13" onclick="show(13)"></td>
+        <td id="14" onclick="show(14)"></td>
+        <td id="15" onclick="show(15)"></td>
+        <td id="16" onclick="show(16)"></td>
+    </tr>
+</table>
+    <form name="clockform">
+        <p>
+            <input name="starter" type="button" value="Старт" onclick="findTIME()">
+            <input name="clock" size="12" maxlength="12" value="00:00:00.00">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </p>
+    </form>
+</div>
+<script>
+    /*
+    colors - это цвета, по мере рандома, из неё удаляются элементы рандомно
+    blocks - это цвета ячеек
+     */
+    colors = ["red", "blue", "green","yellow","grey","black","orange","#ff00ab","red", "blue", "green","yellow","grey","black","orange","#ff00ab"];
+    blocks = ["","","","","","","","","","","","","","","",""];
+    var max = 15;
+    var answer = 0;
+    /*
+    В цикле каждой ячейке задается рандомный цвет
+     */
+    for(var i=0; i<16;i++){
+        number=parseInt(Math.random() * max);
+        blocks[i]=colors[number];
+        colors.splice(number,1);
+        max--;
+    }
+    console.log(blocks);
+    function playing(){
+
+    }
+    var x=false;
+    var y=0;
+    var ids=0;
+    function wait(ms)
+    {
+        var d = new Date();
+        var d2 = null;
+        do { d2 = new Date(); }
+        while(d2-d < ms);
+    }
+    /*
+        Функция перекраски ячейки в белый цвет
+     */
+    function clear() {
+        document.getElementById(y).style.backgroundColor="white";
+        document.getElementById(ids).style.backgroundColor="white";
+    }
+    /*
+        Функция вывода цвета ячейки
+     */
+    function show(id){
+        if(document.getElementById(id).style.backgroundColor===""||document.getElementById(id).style.backgroundColor==="white"){
+            if(x===false){
+                x=true;
+                document.getElementById(id).style.backgroundColor=blocks[id-1];
+                y=id;
+            }
+            else if(y===id){}
+            else{
+                x=false;
+                if(blocks[y-1]===blocks[id-1]){
+                    document.getElementById(id).style.backgroundColor=blocks[id-1];
+                    answer++;
+                }
+                else{
+                    document.getElementById(id).style.backgroundColor=blocks[id-1];
+                    ids=id;
+                    setTimeout(clear, 500);
+                }
+            }
+        }
+    }
+    var init=0;
+    var startDate;
+    var clocktimer;
+    function trim(string) { return string.replace (/\s+/g, " ").replace(/(^\s*)|(\s*)$/g, ''); }
+    function clearFields() {
+        init = 0;
+        clearTimeout(clocktimer);
+        document.clockform.clock.value='00:00:00.00';
+        document.clockform.label.value='';
+    }
+    function stop(){
+        var str = trim(document.clockform.label.value);
+        document.getElementById('marker').innerHTML = (str==''?'':str+': ') +
+            document.clockform.clock.value + '<br>' + document.getElementById('marker').innerHTML;
+        clearFields();
+    }
+    function startTIME() {
+        if(answer===8){
+            alert("Вы выиграли!\nЗатраченное время: "+document.clockform.clock.value);
+            return "";
+        }
+        var thisDate = new Date();
+        var t = thisDate.getTime() - startDate.getTime();
+        var ms = t%1000; t-=ms; ms=Math.floor(ms/10);
+        t = Math.floor (t/1000);
+        var s = t%60; t-=s;
+        t = Math.floor (t/60);
+        var m = t%60; t-=m;
+        t = Math.floor (t/60);
+        var h = t%60;
+        if (h<10) h='0'+h;
+        if (m<10) m='0'+m;
+        if (s<10) s='0'+s;
+        if (ms<10) ms='0'+ms;
+        if (init===1) document.clockform.clock.value = h + ':' + m + ':' + s + '.' + ms;
+        clocktimer = setTimeout("startTIME()",10);
+    }
+
+
+    function clearALL() {
+        clearFields();
+        document.getElementById('marker').innerHTML = '';
+    }
+    function findTIME() {
+        answer = 0;
+        if (init==0) {
+            startDate = new Date();
+            startTIME();
+            init=1;
+        }
+        else {
+            var str = trim(document.clockform.label.value);
+            document.getElementById('marker').innerHTML = (str==''?'':str+': ') +
+                document.clockform.clock.value + '<br>' + document.getElementById('marker').innerHTML;
+            clearFields();
+        }
+    }
+</script>
+<!--<script type="text/javascript">
+    function trim(string) { return string.replace (/\s+/g, " ").replace(/(^\s*)|(\s*)$/g, ''); }
+    var init=0;
+    var startDate;
+    var clocktimer;
+
+    function clearFields() {
+        init = 0;
+        clearTimeout(clocktimer);
+        document.clockform.clock.value='00:00:00.00';
+        document.clockform.label.value='';
+    }
+
+    function clearALL() {
+        clearFields();
+        document.getElementById('marker').innerHTML = '';
+    }
+
+    function startTIME() {
+        var thisDate = new Date();
+        var t = thisDate.getTime() - startDate.getTime();
+        var ms = t%1000; t-=ms; ms=Math.floor(ms/10);
+        t = Math.floor (t/1000);
+        var s = t%60; t-=s;
+        t = Math.floor (t/60);
+        var m = t%60; t-=m;
+        t = Math.floor (t/60);
+        var h = t%60;
+        if (h<10) h='0'+h;
+        if (m<10) m='0'+m;
+        if (s<10) s='0'+s;
+        if (ms<10) ms='0'+ms;
+        if (init==1) document.clockform.clock.value = h + ':' + m + ':' + s + '.' + ms;
+        clocktimer = setTimeout("startTIME()",10);
+    }
+
+    function findTIME() {
+        if (init==0) {
+            startDate = new Date();
+            startTIME();
+            init=1;
+        }
+        else {
+            var str = trim(document.clockform.label.value);
+            document.getElementById('marker').innerHTML = (str==''?'':str+': ') +
+                document.clockform.clock.value + '<br>' + document.getElementById('marker').innerHTML;
+            clearFields();
+        }
+    }
+</script>
+<noscript><p>Извините, для работы приложения нужен включённый JavaScript</p></noscript>
+
+<form name="clockform">
+    <p>Время:
+        <input name="clock" size="12" maxlength="12" value="00:00:00.00">
+        Метка:
+        <input name="label" size="12" maxlength="40" value="">
+        <input name="starter" type="button" value="Старт/Стоп" onclick="findTIME()">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input name="clearer" type="button" value="Сбросить всё" onclick="clearALL()">
+    </p><p id="marker">
+</p>
+</form>
+<noscript><p>Извините, для работы приложения нужен включённый JavaScript</p></noscript>
+-->
+</body>
+</html>

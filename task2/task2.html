@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 1</title>
+</head>
+<body>
+<form>
+    <p>Исходное положение: <input id="start_place" type="text" name="place" value="D4"></p>
+    <p><button onclick="compute()">Ок</button></p>
+</form>
+<script>
+    // начальная позиция
+    start_number_place = [0,0];
+    // Ответ
+    var text = "";
+    /*
+    Функция который переводит букву координат в цифру, т.е. А - 0
+     */
+    function number_place(text) {
+        switch(text){
+            case 'A':
+                start_number_place[0]=0;
+                break;
+            case 'B':
+                start_number_place[0]=1;
+                break;
+            case 'C':
+                start_number_place[0]=2;
+                break;
+            case 'D':
+                start_number_place[0]=3;
+                break;
+            case 'E':
+                start_number_place[0]=4;
+                break;
+            case 'F':
+                start_number_place[0]=5;
+                break;
+            case 'G':
+                start_number_place[0]=6;
+                break;
+            case 'H':
+                start_number_place[0]=7;
+                break;
+            default:
+                alert("Ошибка!");
+                break;
+        }
+    }
+
+    /*
+    Функция обработчик события onclick
+    Главная функция, которая вызывает остальные и выводит ответ
+     */
+    function compute(){
+        var start_place = document.getElementById("start_place").value;
+        number_place(start_place[0]);
+        start_number_place[1]=(start_place[1]-1);
+        text = "";
+        all_go();
+        alert("Возможные варианты хода: \n\n"+text);
+    }
+
+    /*
+    Функция переводит цифру в координату, т.е. 0 - А
+     */
+    function search_place(number) {
+        switch(number){
+            case 0:
+                return 'A';
+            case 1:
+                return 'B';
+            case 2:
+                return 'C';
+            case 3:
+                return 'D';
+            case 4:
+                return 'E';
+            case 5:
+                return 'F';
+            case 6:
+                return 'G';
+            case 7:
+                return 'H';
+            default:
+                return 'Ошибка';
+        }
+    }
+
+    /*
+    Функция вычисляет координаты, куда может ходить конь
+     */
+    function all_go(){
+        var x = start_number_place[0];
+        var y = start_number_place[1];
+        if(x+2<=7){
+            if(y+1<=7){
+                place_x=search_place(x+2);
+                text+=" "+place_x+(parseInt(y)+2);
+            }
+            if(y-1>=0){
+                place_x=search_place(x+2);
+                text+=" "+place_x+(parseInt(y)-1+1);
+            }
+        }
+        if(x-2>=0){
+            if(y+1<=7){
+                place_x=search_place(x-2);
+                text+=" "+place_x+(parseInt(y)+1+1);
+            }
+            if(y-1>=0){
+                place_x=search_place(x-2);
+                text+=" "+place_x+(parseInt(y)-1+1);
+            }
+        }
+        if(y+2<=7){
+            if(x+1<=7){
+                place_x=search_place(x+1);
+                text+=" "+place_x+(parseInt(y)+2+1);
+            }
+            if(x-1>=0){
+                place_x=search_place(x-1);
+                text+=" "+place_x+(parseInt(y)+2+1);
+            }
+        }
+        if(y-2>=0){
+            if(x+1<=7){
+                place_x=search_place(x+1);
+                text+=" "+place_x+(parseInt(y)-2+1);
+            }
+            if(x-1>=0){
+                place_x=search_place(x-1);
+                text+=" "+place_x+(parseInt(y)-2+1);
+            }
+
+        }
+    }
+</script>
+</body>
+</html>
